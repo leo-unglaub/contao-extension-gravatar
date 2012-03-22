@@ -66,7 +66,7 @@ class Gravatar extends System
 	public function getLocalPath($strEmail, $intSize='')
 	{
 		$strRemotePath = $this->getPath($strEmail, $intSize);
-		$strLocalPath = 'system/html/gravatar_' . $this->generateHash($strEmail) . '.jpg';
+		$strLocalPath = 'system/html/gravatar_' . md5($strRemotePath) . '.jpg';
 
 		// check if the cached file exists
 		if (file_exists(TL_ROOT . '/' . $strLocalPath))
