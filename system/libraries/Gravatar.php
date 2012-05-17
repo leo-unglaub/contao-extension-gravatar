@@ -42,7 +42,7 @@ class Gravatar extends System
 	 * @param int $intSize
 	 * @return string
 	 */
-	public function getPath($strEmail, $intSize='')
+	public function getRemotePath($strEmail, $intSize='')
 	{
 		$strPath = 'http://www.gravatar.com/avatar/' . $this->generateHash($strEmail);
 
@@ -65,7 +65,7 @@ class Gravatar extends System
 	 */
 	public function getLocalPath($strEmail, $intSize='')
 	{
-		$strRemotePath = $this->getPath($strEmail, $intSize);
+		$strRemotePath = $this->getRemotePath($strEmail, $intSize);
 		$strLocalPath = 'system/html/gravatar_' . md5($strRemotePath) . '.jpg';
 
 		// check if the cached file exists
@@ -93,6 +93,38 @@ class Gravatar extends System
 
 		// Fallback if there was an error writing/requesting the cached file
 		return $strRemotePath;
+	}
+
+
+	/**
+	 * Return a html <img> tag containing the remote image
+	 * 
+	 * Note: There is no way of determinating the with and height of the remote
+	 *       image. So the <img> tag is not xHTML valid.
+	 * 
+	 * @param string $strEmail
+	 * @param int $intSize
+	 * @return string
+	 */
+	public function getRemoteImageTag($strEmail, $intSize='')
+	{
+		return '<img src="' . $this->getRemoteImage($strEmail, $intSize) . '" />';
+	}
+
+
+	/**
+	 * Return a html <img> tag containing the local image
+	 * 
+	 * @param string $strEmail
+	 * @param int $intSize
+	 * @return string
+	 */
+	public function getLocalImageTag($strEmail, $intSize='')
+	{
+		$strImage = $this->getLocalPath($strEmail, $intSize);
+		$objLocalImage = new File($strImage);
+
+		return '<img src="' . $strImage . '" width="' . $objLocalImage->width . '" height="' . $objLocalImage->height . '" />';
 	}
 
 
